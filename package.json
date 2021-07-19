@@ -1,0 +1,50 @@
+{
+  "name": "econverse-build",
+  "version": "0.0.1",
+  "author": "Vitor Seles <vitor.seles@econverse.com.br>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "clean": "rm -Rf ./dist",
+    "watch": "gulp watch --color",
+    "start": "npm run clean && gulp build --color && npm run watch",
+    "build": "npm run clean && gulp build --production --color",
+    "images": "gulp images --color"
+  },
+  "browserslist": [
+    "> 0%"
+  ],
+  "devDependencies": {
+    "@babel/cli": "^7.14.5",
+    "@babel/core": "^7.14.6",
+    "@babel/eslint-parser": "^7.14.7",
+    "@babel/plugin-transform-runtime": "^7.14.5",
+    "@babel/preset-env": "^7.14.7",
+    "@babel/register": "^7.14.5",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-commonjs": "^19.0.1",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.0.2",
+    "@rollup/plugin-replace": "^3.0.0",
+    "autoprefixer": "^10.3.1",
+    "cssnano": "^5.0.6",
+    "gulp": "^4.0.2",
+    "gulp-better-rollup": "^4.0.1",
+    "gulp-eslint": "^6.0.0",
+    "gulp-imagemin": "^7.1.0",
+    "gulp-plumber": "^1.2.1",
+    "gulp-postcss": "^9.0.0",
+    "gulp-sass": "^4.1.0",
+    "gulp-uglify": "^3.0.2",
+    "node-sass": "^6.0.1",
+    "postcss": "^8.3.5",
+    "rollup": "^2.53.2",
+    "rollup-plugin-postcss": "^4.0.0"
+  },
+  "engines": {
+    "node": ">= 8.0.0"
+  },
+  "resolutions": {
+    "graceful-fs": "^4.2.4"
+  }
+}
