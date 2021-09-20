@@ -21,6 +21,8 @@
     "no-unreachable": "off",
     "no-global-assign": "off",
     "no-useless-escape": "off",
-    "no-mixed-spaces-and-tabs": "off"
+    "no-mixed-spaces-and-tabs": "off",
+    "no-extra-boolean-cast": "off",
+    "no-case-declarations": "off"
   }
 }

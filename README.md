@@ -1,4 +1,4 @@
-# ECONVERSE - Builder
+# ECONVERSE - Build
 
 
 Workflow criado em Gulp para automatizações de tarefas.
@@ -6,6 +6,7 @@ Workflow criado em Gulp para automatizações de tarefas.
 
 # Estrutura dos diretórios
 
+src
 
 ├─── assets
 
@@ -29,6 +30,12 @@ Workflow criado em Gulp para automatizações de tarefas.
 
 │   │   └─── scss
 
+│   ├─── responsive
+
+│   │   ├─── js
+
+│   │   └─── scss
+
 └─── views
 
 ├  ├  ├─── common
@@ -36,6 +43,8 @@ Workflow criado em Gulp para automatizações de tarefas.
 ├  ├  ├─── desktop
 
 ├  ├  └─── mobile
+
+├  ├  └─── responsive
 
 
 # Ferramentas disponíveis
@@ -47,14 +56,14 @@ Workflow criado em Gulp para automatizações de tarefas.
 - **SASS**: Compilador para arquivos SCSS;
 - **PostCSS**, **Autoprefixer**, **cssnano**: Processadores de estilos CSS;
 - **ESLint**: Validação de códigos JavaScript;
-- **MinifyJS, SCSS**: Minificação de arquivos JavaScript e CSS;
+- **Uglify**: Minificação de arquivos JavaScript;
 - **Minify Images**: Minificação de imagens;
 
 # Comandos de diretório
 
 
 - **node -v**: Verificar instalação / versão do NodeJS;
-- Recomendado: >= 8.0.0
+- Recomendado: >= 10.0.0
 
 
 - **gulp --version**: Verificar instalação / versão do Gulp;

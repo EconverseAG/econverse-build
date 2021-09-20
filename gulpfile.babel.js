@@ -1,8 +1,8 @@
 /**
- * Econverse Store Builder
+ * Econverse Store Build
  * https://econverse.digital/
  * Author: Vitor Seles <vitor.seles@econverse.com.br>
- * Repository / Docs: ~
+ * Repository / Docs: <https://github.com/vseles/econverse-build>
 */
 
 // Import Modules;
@@ -21,8 +21,10 @@ import rollup_commonjs from '@rollup/plugin-commonjs';
 import rollup_json from '@rollup/plugin-json';
 import rollup_resolve from '@rollup/plugin-node-resolve';
 import rollup_babel from '@rollup/plugin-babel';
+import rollup_strip from '@rollup/plugin-strip';
 import rollup_replace from '@rollup/plugin-replace';
 import rollup_postcss from 'rollup-plugin-postcss';
+import rollup_cleanup from 'rollup-plugin-cleanup';
 import { src, dest, series, watch } from 'gulp';
 
 // Set SASS Compiler;
@@ -39,6 +41,13 @@ const LogUpdate = function (filePath) {
   const colors = `\x1b[32m`;
   const reset = `\x1b[0m`;
   return console.log(`${colors}[${new Date().toLocaleTimeString()}] "${filePath}" updated.${reset}`);
+};
+
+// Log Error
+const LogError = function ( errorMessage ) {
+  const colors = `\x1b[31m`;
+  const reset = `\x1b[0m`;
+  return console.log(`${colors}${errorMessage}${reset}`);
 };
 
 // Get a File Parent Path;
@@ -68,6 +77,10 @@ Builder.paths = {
       js: './src/assets/mobile/js',
       scss: './src/assets/mobile/scss'
     },
+    responsive: {
+      js: './src/assets/responsive/js',
+      scss: './src/assets/responsive/scss'
+    }
   }
 };
 
@@ -110,6 +123,18 @@ Builder.globs = {
         js: ['./src/assets/mobile/js/*.js', './src/assets/mobile/js/**/*.js'],
         scss: ['./src/assets/mobile/scss/*.scss', './src/assets/mobile/scss/**/*.scss']
       }
+    },
+    responsive: {
+      build: {
+        js: ['./src/assets/responsive/js/*.js'],
+        scss: ['./src/assets/responsive/scss/*.scss'],
+        js_modules: ['./src/assets/responsive/js/**/*.js', '!./src/assets/responsive/js/*.js'],
+        scss_modules: ['./src/assets/responsive/scss/**/*.scss', '!./src/assets/responsive/scss/*.scss'],
+      },
+      linters: {
+        js: ['./src/assets/responsive/js/*.js', './src/assets/responsive/js/**/*.js'],
+        scss: ['./src/assets/responsive/scss/*.scss', './src/assets/responsive/scss/**/*.scss']
+      }
     }
   }
 };
@@ -139,8 +164,22 @@ const Replace = {
 // Uglify Config;
 const Uglify = {
   sourceMap: false,
-  mangle: { toplevel: true },
+  mangle: { toplevel: false },
   compress: { negate_iife: false }
+};
+
+// Cleanup Config;
+const Cleanup = {
+  sourcemap: false,
+  comments: 'none'
+};
+
+// Strip Config;
+const Strip = {
+  debugger: true,
+  sourceMap: false,
+  labels: ['unittest'],
+  functions: [ 'console.log', 'assert.*', 'debug' ]
 };
 
 // PostCSS Config;
@@ -157,13 +196,15 @@ const Rollup = {
     true && rollup_postcss({ plugins: PostCSS }),
     true && rollup_resolve( Resolve ),
     true && rollup_babel( Babel ),
-    true && rollup_replace( Replace )
+    true && rollup_replace( Replace ),
+    isProduction && rollup_strip( Strip ),
+    isProduction && rollup_cleanup( Cleanup )
   ].filter( Boolean ),
   onwarn: warning => (
     // Ignore warnings
     warning.code === 'EMPTY_BUNDLE' ||
     warning.code === 'THIS_IS_UNDEFINED'
-  ) ? null : console.log(`[${warning.code}] ${warning.message}`)
+  ) ? null : LogError(`[${warning.code}] ${warning.message}`)
 };
 
 // Gulp Task Pipes;
@@ -247,7 +288,8 @@ const eslinter = function (__callback) {
   const source = src([
     ...Builder.globs.assets.common.linters.js,
     ...Builder.globs.assets.desktop.linters.js,
-    ...Builder.globs.assets.mobile.linters.js
+    ...Builder.globs.assets.mobile.linters.js,
+    ...Builder.globs.assets.responsive.linters.js
   ], { base: './src' });
 
   return Pipes.eslint(source);
@@ -259,7 +301,8 @@ const scripts = function (__callback) {
   const source = src([
     ...Builder.globs.assets.common.build.js,
     ...Builder.globs.assets.desktop.build.js,
-    ...Builder.globs.assets.mobile.build.js
+    ...Builder.globs.assets.mobile.build.js,
+    ...Builder.globs.assets.responsive.build.js
   ], { base: './src' });
 
   return Pipes.scripts(source);
@@ -271,7 +314,8 @@ const styles = function (__callback) {
   const source = src([
     ...Builder.globs.assets.common.build.scss,
     ...Builder.globs.assets.desktop.build.scss,
-    ...Builder.globs.assets.mobile.build.scss
+    ...Builder.globs.assets.mobile.build.scss,
+    ...Builder.globs.assets.responsive.build.scss
   ], { base: './src' });
 
   return Pipes.styles(source);
@@ -280,7 +324,9 @@ const styles = function (__callback) {
 // Images Task;
 const images = function (__callback) {
 
-  const source = src([ ...Builder.globs.assets.common.build.images ], { base: './src' });
+  const source = src([
+    ...Builder.globs.assets.common.build.images
+  ], { base: './src' });
   return Pipes.images(source);
 };
 
@@ -291,13 +337,15 @@ exports.watch = function (__callback) {
   const js_watch = watch([
     ...Builder.globs.assets.common.build.js,
     ...Builder.globs.assets.desktop.build.js,
-    ...Builder.globs.assets.mobile.build.js
+    ...Builder.globs.assets.mobile.build.js,
+    ...Builder.globs.assets.responsive.build.js
   ]);
 
   const scss_watch = watch([
     ...Builder.globs.assets.common.build.scss,
     ...Builder.globs.assets.desktop.build.scss,
-    ...Builder.globs.assets.mobile.build.scss
+    ...Builder.globs.assets.mobile.build.scss,
+    ...Builder.globs.assets.responsive.build.scss
   ]);
 
   // Files Changed;
@@ -320,13 +368,15 @@ exports.watch = function (__callback) {
   const js_modules_watch = watch([
     ...Builder.globs.assets.common.build.js_modules,
     ...Builder.globs.assets.desktop.build.js_modules,
-    ...Builder.globs.assets.mobile.build.js_modules
+    ...Builder.globs.assets.mobile.build.js_modules,
+    ...Builder.globs.assets.responsive.build.js_modules
   ]);
 
   const scss_modules_watch = watch([
     ...Builder.globs.assets.common.build.scss_modules,
     ...Builder.globs.assets.desktop.build.scss_modules,
-    ...Builder.globs.assets.mobile.build.scss_modules
+    ...Builder.globs.assets.mobile.build.scss_modules,
+    ...Builder.globs.assets.responsive.build.scss_modules
   ]);
 
   // Modules Changed;
@@ -350,7 +400,9 @@ exports.watch = function (__callback) {
   scss_modules_watch.on('change', scss_modules_Changed);
 
   // Watch Images;
-  watch([ ...Builder.globs.assets.common.build.images ], images);
+  watch([
+    ...Builder.globs.assets.common.build.images
+  ], images);
 
   return __callback();
 };
