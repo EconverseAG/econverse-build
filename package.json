@@ -1,14 +1,14 @@
 {
   "name": "econverse-build",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Vitor Seles <vitor.seles@econverse.com.br>",
   "license": "MIT",
   "private": true,
   "scripts": {
-    "clean": "rm -Rf ./dist",
+    "vtex": "gulp build --production --color && gulp watch --production --color",
+    "start": "gulp build --color && npm run watch --color",
+    "build": "gulp build --production --color",
     "watch": "gulp watch --color",
-    "start": "npm run clean && gulp build --color && npm run watch",
-    "build": "npm run clean && gulp build --production --color",
     "images": "gulp images --color"
   },
   "browserslist": [
@@ -29,22 +29,24 @@
     "@rollup/plugin-strip": "^2.1.0",
     "autoprefixer": "^10.3.1",
     "cssnano": "^5.0.6",
+    "eslint": "^8.1.0",
     "gulp": "^4.0.2",
-    "gulp-better-rollup": "^4.0.1",
     "gulp-eslint": "^6.0.0",
     "gulp-imagemin": "^7.1.0",
     "gulp-plumber": "^1.2.1",
     "gulp-postcss": "^9.0.0",
+    "gulp-rename": "^2.0.0",
     "gulp-sass": "^4.1.0",
     "gulp-uglify": "^3.0.2",
     "node-sass": "^6.0.1",
     "postcss": "^8.3.5",
     "rollup": "^2.53.2",
     "rollup-plugin-cleanup": "^3.2.1",
-    "rollup-plugin-postcss": "^4.0.0"
+    "rollup-plugin-postcss": "^4.0.0",
+    "gulp-better-rollup": "https://github.com/vseles/gulp-better-rollup.git"
   },
   "engines": {
-    "node": ">= 10.0.0"
+    "node": ">= 12.13.0"
   },
   "resolutions": {
     "graceful-fs": "^4.2.4"

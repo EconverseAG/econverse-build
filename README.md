@@ -6,7 +6,7 @@ Workflow criado em Gulp para automatizações de tarefas.
 
 # Estrutura dos diretórios
 
-src
+**│ src**
 
 ├─── assets
 
@@ -38,13 +38,6 @@ src
 
 └─── views
 
-├  ├  ├─── common
-
-├  ├  ├─── desktop
-
-├  ├  └─── mobile
-
-├  ├  └─── responsive
 
 
 # Ferramentas disponíveis
@@ -62,14 +55,6 @@ src
 # Comandos de diretório
 
 
-- **node -v**: Verificar instalação / versão do NodeJS;
-- Recomendado: >= 10.0.0
-
-
-- **gulp --version**: Verificar instalação / versão do Gulp;
-- Recomendado: CLI version: 2.3.0 / Local version: 4.0.2
-
-
 - **npm install gulp -g**: Instalar o Gulp globalmente;
 - **npm install yarn -g**: Instalar o Yarn globalmente;
 
@@ -78,6 +63,7 @@ src
 
 
 - **yarn start** - Gera uma build de desenvolvimento e observa alterações nos arquivos de diretório;
+- **yarn vtex** - Gera uma build de produção e observa alterações nos arquivos de diretório;
 - **yarn build** - Gera uma build de produção para deploy dos arquivos;
 
 
@@ -85,4 +71,9 @@ src
 - **yarn images** - Gera os arquivos de imagens minificadas;
 
 
-- **yarn clean** - Remove a pasta de **dist** via CLI.
+- **node -v**: Verificar instalação / versão do NodeJS;
+- Recomendado: >= 12.13.0
+
+
+- **gulp --version**: Verificar instalação / versão do Gulp;
+- Recomendado: CLI version: 2.3.0 / Local version: 4.0.2

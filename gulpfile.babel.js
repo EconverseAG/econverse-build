@@ -7,6 +7,7 @@
 
 // Import Modules;
 import fs from 'fs';
+import rename from 'gulp-rename';
 import sass from 'gulp-sass';
 import node_sass from 'node-sass';
 import autoprefixer from 'autoprefixer';
@@ -40,14 +41,14 @@ const BABELRC = JSON.parse( fs.readFileSync('.babelrc') );
 const LogUpdate = function (filePath) {
   const colors = `\x1b[32m`;
   const reset = `\x1b[0m`;
-  return console.log(`${colors}[${new Date().toLocaleTimeString()}] "${filePath}" updated.${reset}`);
+  return console.log(`[${`\x1b[2m`}${new Date().toLocaleTimeString()}${`\x1b[0m`}] ${colors}File "${filePath}" updated.${reset}`);
 };
 
 // Log Error
 const LogError = function ( errorMessage ) {
   const colors = `\x1b[31m`;
   const reset = `\x1b[0m`;
-  return console.log(`${colors}${errorMessage}${reset}`);
+  return console.log(`[${`\x1b[2m`}${new Date().toLocaleTimeString()}${`\x1b[0m`}] ${colors}${errorMessage}${reset}`);
 };
 
 // Get a File Parent Path;
@@ -240,12 +241,13 @@ const Pipes = {
     return source.pipe(plumber())
       .pipe(sass().on('error', sass.logError ))
       .pipe(gulp_postcss( PostCSS ))
+      .pipe(rename(file => file.dirname = file.dirname.replace('scss', 'css') ))
       .pipe(dest(Builder.paths.dist))
   },
 
   images: function (source) {
 
-    return source.pipe(gulp_imagemin())
+    return source.pipe(gulp_imagemin({ silent: true }))
       .pipe(dest(Builder.paths.dist));
   },
 
@@ -278,8 +280,17 @@ const Pipes = {
     return source.pipe(plumber())
     .pipe(sass().on('error', sass.logError ))
     .pipe(gulp_postcss( PostCSS ))
-    .pipe(dest(Builder.paths.dist).on('end', () => LogUpdate(filePath)))
+    .pipe(rename(file => file.dirname = file.dirname.replace('scss', 'css') ))
+    .pipe(dest(Builder.paths.dist)
+    .on('end', () => LogUpdate(filePath)))
   }
+};
+
+const clear = function (__callback) {
+  // Remove 'dist' folder before setup;
+  if ( fs.existsSync(Builder.paths.dist) )
+    fs.rmSync(Builder.paths.dist, { recursive: true });
+  return __callback();
 };
 
 // ESLint Task;
@@ -404,11 +415,15 @@ exports.watch = function (__callback) {
     ...Builder.globs.assets.common.build.images
   ], images);
 
-  return __callback();
+  __callback();
+
+  // Clear console after start watching;
+  console.clear();
+  console.log(`[${`\x1b[2m`}${new Date().toLocaleTimeString()}${`\x1b[0m`}] ${`\x1b[36m`}Watching for changes...${`\x1b[0m`}\n`);
 };
 
 // Default Image Task;
 exports.images = images;
 
 // Default Build Task;
-exports.build = series( eslinter, scripts, styles, images );
+exports.build = series( clear, eslinter, scripts, styles, images );
