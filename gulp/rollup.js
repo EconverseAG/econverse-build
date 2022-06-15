@@ -82,7 +82,8 @@ export const Bundle = file => {
     output: {
       sourcemap: false,
       name: fileName,
-      format: 'umd'
+      format: 'umd',
+      strict: false
     },
     plugins: [
       isTypeScript && rollup_typescript(),
