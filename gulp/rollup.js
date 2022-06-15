@@ -75,7 +75,7 @@ export const Bundle = file => {
   const path = file.path;
   const fileName = file.basename;
   const distPath = file.dirname.replace('src', 'dist');
-  const isTypeScript = file.path.indexOf('.ts') > -1;
+  const isTypeScript = file.extname === '.ts';
 
   const options = { 
     input: path,
