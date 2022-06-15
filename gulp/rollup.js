@@ -99,7 +99,8 @@ export const Bundle = file => {
     onwarn: warning => (
       // Ignore warnings
       warning.code === 'EMPTY_BUNDLE' ||
-      warning.code === 'THIS_IS_UNDEFINED'
+      warning.code === 'THIS_IS_UNDEFINED' || 
+      warning.code === 'CIRCULAR_DEPENDENCY'
     ) ? null : Utils.logError(`[${warning.code}] ${warning.message}`)
   };
 
