@@ -77,13 +77,17 @@ export const Bundle = file => {
   const distPath = file.dirname.replace('src', 'dist');
   const isTypeScript = file.extname === '.ts';
 
-  const options = { 
+  const options = {
     input: path,
+    external: ['jquery'],
     output: {
       sourcemap: false,
       name: fileName,
       format: 'umd',
-      strict: false
+      strict: false,
+      globals: {
+        jquery: '$'
+      }
     },
     plugins: [
       isTypeScript && rollup_typescript(),
@@ -99,7 +103,7 @@ export const Bundle = file => {
     onwarn: warning => (
       // Ignore warnings
       warning.code === 'EMPTY_BUNDLE' ||
-      warning.code === 'THIS_IS_UNDEFINED' || 
+      warning.code === 'THIS_IS_UNDEFINED' ||
       warning.code === 'CIRCULAR_DEPENDENCY'
     ) ? null : Utils.logError(`[${warning.code}] ${warning.message}`)
   };
