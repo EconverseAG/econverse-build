@@ -4,7 +4,7 @@
 Workflow criado em Gulp para automatizações de tarefas.
 
 
-# Estrutura dos diretórios
+## Estrutura dos diretórios
 
 **│ src**
 
@@ -40,7 +40,7 @@ Workflow criado em Gulp para automatizações de tarefas.
 
 
 
-# Ferramentas disponíveis
+## Ferramentas disponíveis
 
 
 - **GulpJS**: Gerenciamento de tarefas;
@@ -57,7 +57,7 @@ Workflow criado em Gulp para automatizações de tarefas.
 - **PostCSS**, **Autoprefixer**, **CSSNANO**: Processadores de estilos CSS;
 - **Image-min**: Minificação de imagens (jpg/png);
 
-# Comandos de diretório
+## Comandos de diretório
 
 - **npm install gulp -g**: Instala o Gulp globalmente via **npm**;
 - **npm install yarn -g**: Instala o Yarn globalmente via **npm**;
